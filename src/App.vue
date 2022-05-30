@@ -7,11 +7,13 @@
     </div>
 
     <iframe
-      :srcdoc="srcdoc"
       sandbox="allow-scripts"
       frameBorder="0"
       width="100%"
+      ref="iframe"
     />
+
+
   </div>
 </template>
 
@@ -27,31 +29,46 @@ export default {
 
   data() {
     return {
-      htmlCode: "",
+      htmlCode: "<h1>TEST</h1>",
       cssCode: "h1 { background: red }",
-      jsCode: ""
+      jsCode: "console.log('bagaceira');",
+      // test: "<html><title>TEST</title><body><h1>Hello World</h1></body><style>h1{ background: blue };</style></html>"
     }
   },
-
-  computed: {
-    srcdoc() {
-      return `
-        <html>
-          <body>
-            ${this.htmlCode}
-          </body>
-
-          <style>
-            ${this.cssCode}
-          </style>
-
-          
-        </html>
-      `
+  mounted(){
+    this.processCode();
+  },
+  watch: {
+    htmlCode: function() {
+      this.processCode();
+    },
+    cssCode: function() {
+      this.processCode();
+    },
+    jsCode: function() {
+      this.processCode();
     },
   },
-
   methods: {
+    processCode(){
+       let html = document.createElement('html')
+        html.innerHTML = `
+          <html>
+            <body>
+              ${this.htmlCode}
+            </body>
+
+            <style>
+              ${this.cssCode}
+            </style>
+          
+          </html>
+        `
+      let script = document.createElement('script')
+      script.innerHTML = this.jsCode || ""
+      html.appendChild(script)
+      this.$refs.iframe.srcdoc = html.outerHTML
+    },
     newCode(key, $event) {
       this[key] = $event
     }
