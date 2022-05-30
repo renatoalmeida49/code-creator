@@ -1,14 +1,17 @@
 <template>
   <div class="codeCreator">
     <div class="codeCreator__editors">
-      <Editor />
-      <Editor />
-      <Editor />
+      <Editor :code="htmlCode" lang="html" @updateCode="newCode('htmlCode', $event)" />
+      <Editor :code="cssCode" lang="css" @updateCode="newCode('cssCode', $event)" />
+      <Editor :code="jsCode" lang="js" @updateCode="newCode('jsCode', $event)"/>
     </div>
 
-    <div>
-      <h1>Iframe</h1>
-    </div>
+    <iframe
+      :srcdoc="srcdoc"
+      sandbox="allow-scripts"
+      frameBorder="0"
+      width="100%"
+    />
   </div>
 </template>
 
@@ -20,6 +23,38 @@ export default {
 
   components: {
     Editor,
+  },
+
+  data() {
+    return {
+      htmlCode: "",
+      cssCode: "h1 { background: red }",
+      jsCode: ""
+    }
+  },
+
+  computed: {
+    srcdoc() {
+      return `
+        <html>
+          <body>
+            ${this.htmlCode}
+          </body>
+
+          <style>
+            ${this.cssCode}
+          </style>
+
+          
+        </html>
+      `
+    },
+  },
+
+  methods: {
+    newCode(key, $event) {
+      this[key] = $event
+    }
   }
 }
 </script>
@@ -34,15 +69,15 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
 .codeCreator {
+  min-height: 100vh;
+
   &__editors {
-    background: red;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 }
 </style>
