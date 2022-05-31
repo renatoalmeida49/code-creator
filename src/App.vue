@@ -6,14 +6,15 @@
       <Editor :code="jsCode" lang="js" @updateCode="newCode('jsCode', $event)"/>
     </div>
 
-    <iframe
-      sandbox="allow-scripts"
-      frameBorder="0"
-      width="100%"
-      ref="iframe"
-    />
-
-
+    <div class="codeCreator__container">
+      <iframe
+        class="codeCreator__iframe"
+        sandbox="allow-scripts"
+        frameBorder="0"
+        width="100%"
+        ref="iframe"
+      />
+    </div>
   </div>
 </template>
 
@@ -30,45 +31,45 @@ export default {
   data() {
     return {
       htmlCode: "<h1>TEST</h1>",
-      cssCode: "h1 { background: red }",
-      jsCode: "console.log('bagaceira');",
-      // test: "<html><title>TEST</title><body><h1>Hello World</h1></body><style>h1{ background: blue };</style></html>"
+      cssCode: `h1 { background: red }`,
+      jsCode: "console.log('Welcome to CodeCreator!');",
     }
   },
+
   mounted(){
     this.processCode();
   },
+
   watch: {
-    htmlCode: function() {
+    htmlCode() {
       this.processCode();
     },
-    cssCode: function() {
+    cssCode() {
       this.processCode();
     },
-    jsCode: function() {
+    jsCode() {
       this.processCode();
     },
   },
+
   methods: {
     processCode(){
-       let html = document.createElement('html')
+      let html = document.createElement('html')
         html.innerHTML = `
-          <html>
-            <body>
-              ${this.htmlCode}
-            </body>
+          <body>
+            ${this.htmlCode}
+          </body>
 
-            <style>
-              ${this.cssCode}
-            </style>
-          
-          </html>
+          <style>
+            ${this.cssCode}
+          </style>
         `
       let script = document.createElement('script')
       script.innerHTML = this.jsCode || ""
       html.appendChild(script)
       this.$refs.iframe.srcdoc = html.outerHTML
     },
+
     newCode(key, $event) {
       this[key] = $event
     }
@@ -94,7 +95,20 @@ export default {
 
   &__editors {
     display: flex;
+    position: relative;
     justify-content: space-around;
+    height: 30vh;
+    resize: vertical;
+    overflow: auto;
+  }
+
+  &__container {
+    height: 70vh;
+  }
+
+  &__iframe {
+    display: block;
+    height: 100%;
   }
 }
 </style>
