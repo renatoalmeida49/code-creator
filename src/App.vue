@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import html from "@/config/html.js"
+import css from "@/config/css.js"
+import js from "@/config/js.js"
 import Editor from './components/Editor.vue'
 
 export default {
@@ -30,9 +33,9 @@ export default {
 
   data() {
     return {
-      htmlCode: "<h1>TEST</h1>",
-      cssCode: `h1 { background: red }`,
-      jsCode: "console.log('Welcome to CodeCreator!');",
+      htmlCode: html(),
+      cssCode: css(),
+      jsCode: js(),
     }
   },
 
@@ -83,6 +86,7 @@ export default {
   margin: 0;
   box-sizing: border-box;
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
